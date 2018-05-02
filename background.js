@@ -26,7 +26,7 @@ function requestApi() {
                         var timer = Number(response.timer),site_list = response.request.site_list;
                         !isNaN(timer) ? setIntervalRequestApi(site_list,timer):setIntervalRequestApi(site_list,60);
                     } else {
-                        items.api_error ? setError(api_error): setError();
+                        setError(response.error.message);
                     }
                 }).fail(function (err) {
                     clearVariables(err);
@@ -78,13 +78,10 @@ function setBatchText(endTime) {
         chrome.browserAction.setBadgeBackgroundColor({color: "gray"});
     }, 1000);
 }
-function setError(lastError = false) {
+function setError(lastError) {
     clearBackgroundVariable();
-    if(lastError === false){
-        chrome.storage.local.set({'api_error': 'Your api is not active'});
-    }else{
-        chrome.storage.local.set({'api_error': lastError.toString() + '\n Your api is not active'});
-    }
+    chrome.storage.local.set({'api_error': lastError.toString()});
+
 }
 function clearVariables(err) {
     clearBackgroundVariable();
