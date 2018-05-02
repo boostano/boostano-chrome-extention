@@ -33,7 +33,7 @@ function requestApi() {
                 });
             } else {
                 if( status===false && resp.enabled !== true) {
-                    var errorMsg = 'Extension is not active and alexa extension is not install or enable';
+                    var errorMsg = 'For activate this extention, first your should install Alexa Traffic Rank then click run button on top toolbar to start!';
                 }else if(status===false && resp.enabled === true){
                     var errorMsg = 'Click on Run button on top toolbar to start!';
                 }else if(status===true && resp.enabled !== true){
