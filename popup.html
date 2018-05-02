@@ -1,0 +1,107 @@
+
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Language" content="en" />
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="theme-color" content="#4188c9">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
+    <!-- Generated: 2018-04-16 09:29:05 +0200 -->
+    <title>Register - tabler.github.io - a responsive, flat and full featured admin template</title>
+    <link href="./css/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
+    <link rel="stylesheet" href="./assets/css/css-font.css">
+    <link rel="stylesheet" href="./assets/css/font-awesome.min.css">
+    <script src="./assets/js/require.min.js"></script>
+    <script src="./assets/js/inline.js"></script>
+    <!-- Dashboard Core -->
+    <link href="./assets/css/dashboard.css" rel="stylesheet" />
+    <script src="./assets/js/dashboard.js"></script>
+    <!-- c3.js Charts Plugin -->
+    <link href="./assets/plugins/charts-c3/plugin.css" rel="stylesheet" />
+    <script src="./assets/plugins/charts-c3/plugin.js"></script>
+    <!-- Google Maps Plugin -->
+    <link href="./assets/plugins/maps-google/plugin.css" rel="stylesheet" />
+    <script src="./assets/plugins/maps-google/plugin.js"></script>
+    <!-- Input Mask Plugin -->
+    <script src="./assets/plugins/input-mask/plugin.js"></script>
+</head>
+<body class="">
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Active and Run </h3>
+        <div class="card-options">
+            <label class="custom-switch m-0">
+                <input type="checkbox" value="1" class="custom-switch-input" name="check_run" id="check_run">
+                <span class="custom-switch-indicator"></span>
+            </label>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="form-group">
+            <label class="form-label">API key</label>
+            <div class="input-group">
+                          <span class="input-group-prepend" id="basic-addon1">
+                            <span class="input-group-text">@</span>
+                          </span>
+                <input type="text" class="form-control" placeholder="Api key" aria-label="Username" aria-describedby="basic-addon1" id="api_key">
+                <span class="input-group-append">
+                      <button class="btn btn-purple" type="button" id="save_key"><i id="save-icon" class="fe fe-activity"></i>  Save </button>
+                </span>
+            </div>
+        </div>
+        <div class="alert alert-icon alert-danger" role="alert" id="error-summery">
+           <div id="errors"></div>
+        </div>
+
+
+
+        <div class="alert alert-success alert-dismissible" id="alexa-toolbar">
+            <button data-dismiss="alert" class="close"></button>
+            <h4>Alexa Traffic Rank</h4>
+            <p>
+                For proper your must install Alexa Traffic Rank extension first
+            </p>
+            <div class="btn-list">
+                <a href="https://chrome.google.com/webstore/detail/alexa-traffic-rank/cknebhggccemgcnbidipinkifmmegdel?hl=en" class="btn btn-success" type="button" target="_blank">Yes, install</a>
+            </div>
+        </div>
+
+
+        <a href="#" class="btn btn-outline-success">Forgot your API?</a>
+        <a href="#" class="btn btn-outline-secondary">Don't have an account?</a>
+    </div>
+</div>
+
+
+<div class="col-sm-6 col-lg-3">
+    <div class="card p-3">
+        <div class="d-flex align-items-center">
+                    <span class="stamp stamp-md bg-red mr-3">
+                      <i class="fe fe-bar-chart"></i>
+                    </span>
+            <div>
+                <h4 class="m-0"><a href="javascript:void(0)" id="point">0 </a><small> Point</small></h4>
+                <small class="text-muted" id="username"></small>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="shared/jquery.min.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>
+
+
+
