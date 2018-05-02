@@ -13,7 +13,6 @@ requestApi();
 
 function requestApi() {
     chrome.management.get("cknebhggccemgcnbidipinkifmmegdel", function (resp) {
-        console.log(resp);
         chrome.storage.local.get(['api_key', 'status', 'api_error'], function (items) {
             var status = items.status, api_key = items.api_key,api_error = items.api_error ;
             if (api_key && status === true && resp.enabled === true) {
