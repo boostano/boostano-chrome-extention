@@ -1,60 +1,68 @@
 (function popup($) {
+
     var checkRun = document.querySelector("#check_run");
     var saveButtom = document.querySelector("#save_key");
-    function checkStatus(api_key){
-        if(api_key) {
-            $.get(
-                "http://luya.ir/api", {
-                    api_key: api_key,
-                }
-            ).done(function (response) {
-                let obj = response;
-                chrome.storage.local.set({'point': W.point, 'name': obj.name, 'api_key': api_key});
-                document.querySelector("#point").innerHTML = obj.point;
-                document.querySelector("#username").innerHTML = obj.name;
-            }).fail(function () {
-                chrome.storage.local.set({'api_error': 'Network Failed'});
-            });
-            chrome.management.get("cknebhggccemgcnbidipinkifmmegdel", function (response) {
-                console.log('majid:'+response.enabled);
-                if (response.enabled === true) {
-                    console.log('test:'+response.enabled);
-                    $("#alexa-toolbar").hide();
-                }
-            });
+
+    async function updatePopupHtml(){
+        const POPUP_DATA = await getData(['status', 'api_key','point','name','api_error']);
+        if (POPUP_DATA["status"]===true || POPUP_DATA["status"]===false) {
+            document.querySelector("#check_run").checked = POPUP_DATA["status"];
         }
-    };
+        if (POPUP_DATA["api_key"]) {
+            document.querySelector("#api_key").value = POPUP_DATA["api_key"];
+        }
+        if (POPUP_DATA["point"]) {
+            document.querySelector("#point").innerHTML = POPUP_DATA["point"];
+        }
+        if (POPUP_DATA["name"]) {
+            document.querySelector("#username").innerHTML = POPUP_DATA["name"];
+        }
+        if (POPUP_DATA["api_error"]) {
+            $("#error-summery").show();
+            document.querySelector("#errors").innerHTML = POPUP_DATA["api_error"];
+        }else{
+            $("#error-summery").hide();
+        }
 
-    // (1) when popup click first call checkStatus
-    chrome.storage.local.get(['api_key'], function (items) {
-        checkStatus(items['api_key']);
-    });
+    }
 
-    // (2) update popup properties after call checkStatus with update storage
-    updatePopup();
+    function getData(arr) {
+        return new Promise(resolve => {
+            chrome.storage.local.get(arr, function (items) {
+                resolve(items);
+            });
+        })
+    }
 
-    function updatePopup(){
-        chrome.storage.local.get(['status', 'api_key','point','name','api_error'], function (items) {
-            if (items["status"]===true || items["status"]===false) {
-                document.querySelector("#check_run").checked = items["status"];
+    function callApi(api_key) {
+        $.get(
+            "http://luya.ir/api", {
+                api_key: api_key,
             }
-            if (items["api_key"]) {
-                document.querySelector("#api_key").value = items["api_key"];
-            }
-            if (items["point"]) {
-                document.querySelector("#point").innerHTML = items["point"];
-            }
-            if (items["name"]) {
-                document.querySelector("#username").innerHTML = items["name"];
-            }
-            if (items["api_error"]) {
-                $("#error-summery").show();
-                document.querySelector("#errors").innerHTML = items["api_error"];
-            }else{
-                $("#error-summery").hide();
+        ).done(function (response) {
+            chrome.storage.local.set({'point': response.point, 'name': response.name, 'api_key': api_key});
+        }).fail(function () {
+            chrome.storage.local.set({'api_error': 'Network Failed'});
+        });
+    }
+    function checkAlexaToolbar(chromeToolbarId) {
+        chrome.management.get(chromeToolbarId, function (response) {
+            if (response.enabled !== true) {
+                $("#alexa-toolbar").append('<div class="alert alert-success alert-dismissible" id="alexa-toolbar"><h4>Alexa Traffic Rank</h4><p>For proper your must install Alexa Traffic Rank extension first</p><div class="btn-list"><a href="https://chrome.google.com/webstore/detail/alexa-traffic-rank/cknebhggccemgcnbidipinkifmmegdel?hl=en" class="btn btn-success" type="button" target="_blank">Yes, install</a> </div> </div>');
             }
         });
-    };
+    }
+
+    async function initPopupCheck() {
+        updatePopupHtml();
+        const DATA = await getData(['api_key']);
+        if(DATA['api_key']){
+            callApi(DATA['api_key']);
+        }
+        checkAlexaToolbar("cknebhggccemgcnbidipinkifmmegdel");
+    }
+
+    initPopupCheck();
 
     // trigger change event when status of extension in popup updated
     checkRun.addEventListener('change', function () {
@@ -63,24 +71,8 @@
 
     // trigger click event when save button click
     saveButtom.addEventListener('click',function () {
-        let api_key = document.querySelector("#api_key").value;
-        $.get(
-            "http://luya.ir/api", {
-                api_key: api_key,
-            }
-        ).done(function (response) {
-            let obj = response;
-            chrome.storage.local.set({'point': obj.point, 'name': obj.name, 'api_key': api_key});
-        }).fail(function () {
-            chrome.storage.local.set({'api_error': 'Network Failed'});
-        });
-    });
-
-    // add listener for changes in storage
-    chrome.storage.onChanged.addListener(function (changes, namespace) {
-        if (namespace === 'local') {
-            updatePopup();
-        }
+        var api_key = document.querySelector("#api_key").value;
+        callApi(api_key);
     });
 
     // change icon when ajax call start and then update icon when ajax success
@@ -88,6 +80,12 @@
         $("#save-icon").attr('class', 'fa fa-spinner fa-spin');
     }).ajaxSuccess(function() {
         $("#save-icon").attr('class', 'fe fe-activity');
+    });
+    // add listener for changes in storage
+    chrome.storage.onChanged.addListener(function (changes, namespace) {
+        if (namespace === 'local') {
+            updatePopupHtml();
+        }
     });
 
 })(jQuery);
