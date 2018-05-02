@@ -35,7 +35,7 @@ function requestApi() {
                 if( status===false && resp.enabled !== true) {
                     var errorMsg = 'Extension is not active and alexa extension is not install or enable';
                 }else if(status===false && resp.enabled === true){
-                    var errorMsg = 'Extension is not active';
+                    var errorMsg = 'Click on Run button on top toolbar to start!';
                 }else if(status===true && resp.enabled !== true){
                     var errorMsg = 'Alexa extension is not install or enable';
                 }
