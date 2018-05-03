@@ -80,6 +80,8 @@ function setBatchText(endTime) {
 }
 function setError(lastError) {
     clearBackgroundVariable();
+    chrome.browserAction.setBadgeBackgroundColor({color: "black"});
+    chrome.browserAction.setBadgeText({text: 'Off'});
     chrome.storage.local.set({'api_error': lastError.toString()});
 
 }
