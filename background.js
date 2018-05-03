@@ -17,7 +17,7 @@ function requestApi() {
             var status = items.status, api_key = items.api_key,api_error = items.api_error ;
             if (api_key && status === true && resp.enabled === true) {
                 $.get(
-                    "http://luya.ir/api", {
+                    "http://boostano.ir/api", {
                         api_key: api_key,
                     }
                 ).done(function (response) {

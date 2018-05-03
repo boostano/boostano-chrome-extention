@@ -41,7 +41,7 @@
 
     function callApi(api_key) {
         $.get(
-            "http://luya.ir/api", {
+            "http://boostano.ir/api", {
                 api_key: api_key,
             }
         ).done(function (response) {
