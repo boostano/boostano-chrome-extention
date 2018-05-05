@@ -48,13 +48,13 @@ function requestApi() {
 
 function setIntervalRequestApi(url,apiTime) {
     if (tabId === false) {
-        chrome.tabs.create({url: url}, function (tab) {
+        chrome.tabs.create({url: url,active:false}, function (tab) {
             tabId = tab.id;
         })
     } else {
         chrome.tabs.get(tabId, function () {
             if (chrome.runtime.lastError) {
-                chrome.tabs.create({url: url}, function (tab) {
+                chrome.tabs.create({url: url,active:false}, function (tab) {
                     tabId = tab.id;
                 })
             } else {
