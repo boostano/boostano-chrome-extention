@@ -95,4 +95,3 @@ function clearBackgroundVariable() {
     clearInterval(remaining);
     clearInterval(myInterval);
 }
-
