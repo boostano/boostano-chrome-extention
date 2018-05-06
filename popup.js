@@ -66,8 +66,10 @@
 
     function checkAlexaToolbar(chromeToolbarId) {
         chrome.management.get(chromeToolbarId, function (response) {
-            if (response.enabled !== true) {
+            if (chrome.runtime.lastError || response.enabled !== true ) {
                 $("#alexa-toolbar").append('<div class="alert alert-success alert-dismissible" id="alexa-toolbar"><h4>Alexa Traffic Rank</h4><p>For proper your must install Alexa Traffic Rank extension first</p><div class="btn-list"><a href="https://chrome.google.com/webstore/detail/alexa-traffic-rank/cknebhggccemgcnbidipinkifmmegdel?hl=en" class="btn btn-success" type="button" target="_blank">Yes, install</a> </div> </div>');
+            }else{
+                chrome.storage.local.remove('api_error');
             }
         });
     }
@@ -78,10 +80,10 @@
             callApi(DATA['api_key']);
         }
         // if updatePopupHtml not called before
+        checkAlexaToolbar("cknebhggccemgcnbidipinkifmmegdel");
         if (updatePopupHtmlFirstTime === false) {
             updatePopupHtml()
         }
-        checkAlexaToolbar("cknebhggccemgcnbidipinkifmmegdel");
     }
 
     initPopupCheck();

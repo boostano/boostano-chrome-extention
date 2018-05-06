@@ -13,36 +13,42 @@ requestApi();
 
 function requestApi() {
     chrome.management.get("cknebhggccemgcnbidipinkifmmegdel", function (resp) {
-        chrome.storage.local.get(['api_key', 'status', 'api_error'], function (items) {
-            var status = items.status, api_key = items.api_key,api_error = items.api_error ;
-            if (api_key && status === true && resp.enabled === true) {
-                $.get(
-                    "http://boostano.ir/api", {
-                        api_key: api_key,
+        if (chrome.runtime.lastError) {
+            var errorMsg = 'Alexa extension is not install';
+            chrome.storage.local.set({'status': false});
+            clearVariables(errorMsg);
+        } else {
+            chrome.storage.local.get(['api_key', 'status', 'api_error'], function (items) {
+                var status = items.status, api_key = items.api_key, api_error = items.api_error;
+                if (api_key && status === true && resp.enabled === true) {
+                    $.get(
+                        "http://boostano.ir/api", {
+                            api_key: api_key,
+                        }
+                    ).done(function (response) {
+                        if (response.request.request_status === true) {
+                            chrome.storage.local.remove('api_error');
+                            var timer = Number(response.timer), site_list = response.request.site_list;
+                            !isNaN(timer) ? setIntervalRequestApi(site_list, timer) : setIntervalRequestApi(site_list, 60);
+                        } else {
+                            setError(response.error.message);
+                        }
+                    }).fail(function (err) {
+                        clearVariables(err);
+                    });
+                } else {
+                    if (status === false && resp.enabled !== true) {
+                        var errorMsg = 'For activate this extention, first you must install Alexa Traffic Rank then click run button on top toolbar to start!';
+                    } else if (status === false && resp.enabled === true) {
+                        var errorMsg = 'Click on Run button on top toolbar to start!';
+                    } else if (status === true && resp.enabled !== true) {
+                        var errorMsg = 'Alexa extension is not install or enable';
                     }
-                ).done(function (response) {
-                    if (response.request.request_status === true) {
-                        chrome.storage.local.remove('api_error');
-                        var timer = Number(response.timer),site_list = response.request.site_list;
-                        !isNaN(timer) ? setIntervalRequestApi(site_list,timer):setIntervalRequestApi(site_list,60);
-                    } else {
-                        setError(response.error.message);
-                    }
-                }).fail(function (err) {
-                    clearVariables(err);
-                });
-            } else {
-                if( status===false && resp.enabled !== true) {
-                    var errorMsg = 'For activate this extention, first your should install Alexa Traffic Rank then click run button on top toolbar to start!';
-                }else if(status===false && resp.enabled === true){
-                    var errorMsg = 'Click on Run button on top toolbar to start!';
-                }else if(status===true && resp.enabled !== true){
-                    var errorMsg = 'Alexa extension is not install or enable';
+                    chrome.storage.local.set({'status': false});
+                    clearVariables(errorMsg);
                 }
-                chrome.storage.local.set({'status': false});
-                clearVariables(errorMsg);
-            }
-        });
+            });
+        }
     });
 }
 
