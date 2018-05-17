@@ -34,11 +34,11 @@
                     if (!isNaN(timer)) {
                         let end = (new Date).getTime() + timer * 1000;
                         setBatchText(end);
-                        setTimeout(main,timer * 1000);
+                        setTimeout(main, timer * 1000);
                     } else {
                         let end = (new Date).getTime() + 60 * 1000;
                         setBatchText(end);
-                        setTimeout(main,60 * 1000);
+                        setTimeout(main, 60 * 1000);
                     }
                 } else {
                     setError(response.error.message);

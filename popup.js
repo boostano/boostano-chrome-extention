@@ -63,7 +63,7 @@
                 }
             });
             return RESULT;
-        }catch (err) {
+        } catch (err) {
             setData({'api_error': 'Failed to fetch'});
         }
     }
@@ -112,7 +112,7 @@
         let api_key = document.querySelector("#api_key").value;
         await callApi(api_key);
         let resp = await getData(['status']);
-        if( resp.status === true ) {
+        if (resp.status === true) {
             chrome.runtime.sendMessage({check_run_change: true});
         }
     });
