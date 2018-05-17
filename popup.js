@@ -40,31 +40,32 @@
     }
 
     async function callApi(api_key) {
-
-        const RESULT = await $.get(
-            "http://boostano.ir/api", {
-                api_key: api_key,
-            }
-        ).done(function (response) {
-            if (response.error.message) {
-                setData({
-                    'point': response.point,
-                    'name': response.name,
-                    'api_key': api_key,
-                    'api_error': response.error.message
-                });
-            } else {
-                setData({
-                    'point': response.point,
-                    'name': response.name,
-                    'api_key': api_key
-                });
-                clearStorage(['api_error']);
-            }
-        }).fail(function () {
-            setData({'api_error': 'Network Failed'});
-        });
-        return RESULT;
+        try {
+            const RESULT = await $.get(
+                "http://boostano.ir/api", {
+                    api_key: api_key,
+                }
+            ).done(function (response) {
+                if (response.error.message) {
+                    setData({
+                        'point': response.point,
+                        'name': response.name,
+                        'api_key': api_key,
+                        'api_error': response.error.message
+                    });
+                } else {
+                    setData({
+                        'point': response.point,
+                        'name': response.name,
+                        'api_key': api_key
+                    });
+                    clearStorage(['api_error']);
+                }
+            });
+            return RESULT;
+        }catch (err) {
+            setData({'api_error': 'Failed to fetch'});
+        }
     }
 
     /**
