@@ -1,14 +1,12 @@
 (function background() {
-    var myInterval;
     var remaining;
     var tabId = false;
-
+    // listen to event if request send from popup.js
     chrome.runtime.onMessage.addListener(function (request) {
-            if (request.check_run_change === true) {
-                main();
-            }
+        if (request.check_run_change === true) {
+            main();
         }
-    );
+    });
     main();
 
     /**
@@ -36,11 +34,11 @@
                     if (!isNaN(timer)) {
                         let end = (new Date).getTime() + timer * 1000;
                         setBatchText(end);
-                        myInterval = setInterval(main, timer * 1000);
+                        setTimeout(main,timer * 1000);
                     } else {
                         let end = (new Date).getTime() + 60 * 1000;
                         setBatchText(end);
-                        myInterval = setInterval(main, 60 * 1000);
+                        setTimeout(main,60 * 1000);
                     }
                 } else {
                     setError(response.error.message);
@@ -60,6 +58,10 @@
         }
     }
 
+    /**
+     * set batch text
+     * @param endTime
+     */
     function setBatchText(endTime) {
         remaining = setInterval(function () {
             let now = (new Date).getTime();
@@ -72,6 +74,10 @@
         }, 1000);
     }
 
+    /**
+     * set error in the storage if error set
+     * @param lastError
+     */
     function setError(lastError) {
         clearBackgroundVariable();
         if (lastError) {
@@ -177,8 +183,10 @@
         })
     }
 
+    /**
+     * clear interval
+     */
     function clearBackgroundVariable() {
         clearInterval(remaining);
-        clearInterval(myInterval);
     }
 })();
