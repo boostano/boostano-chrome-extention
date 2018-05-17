@@ -58,18 +58,28 @@
                     'name': response.name,
                     'api_key': api_key
                 });
+                clearStorage(['api_error']);
             }
         }).fail(function () {
             setData({'api_error': 'Network Failed'});
         });
     }
 
+    /**
+     * remove array of storage items
+     * @param arr|array
+     * @returns {Promise<any>}
+     */
+    function clearStorage(arr) {
+        chrome.storage.local.remove(arr)
+    }
+
     function checkAlexaToolbar(chromeToolbarId) {
         chrome.management.get(chromeToolbarId, function (response) {
-            if (chrome.runtime.lastError || response.enabled !== true ) {
-                $("#alexa-toolbar").append('<div class="alert alert-success alert-dismissible" id="alexa-toolbar"><h4>Alexa Traffic Rank</h4><p>For proper your must install Alexa Traffic Rank extension first</p><div class="btn-list"><a href="https://chrome.google.com/webstore/detail/alexa-traffic-rank/cknebhggccemgcnbidipinkifmmegdel?hl=en" class="btn btn-success" type="button" target="_blank">Yes, install</a> </div> </div>');
-            }else{
-                chrome.storage.local.remove('api_error');
+            if (chrome.runtime.lastError || response.enabled !== true) {
+                $("#alexa-toolbar").append('<div class="alert alert-success alert-dismissible" id="alexa-toolbar"><h4>Alexa Traffic Rank</h4><p>For proper you must install Alexa Traffic Rank extension first</p><div class="btn-list"><a href="https://chrome.google.com/webstore/detail/alexa-traffic-rank/cknebhggccemgcnbidipinkifmmegdel?hl=en" class="btn btn-success" type="button" target="_blank">Yes, install</a> </div> </div>');
+            } else {
+                clearStorage(['api_error']);
             }
         });
     }
@@ -91,6 +101,7 @@
     // trigger change event when status of extension in popup updated
     checkRun.addEventListener('change', function () {
         setData({'status': this.checked});
+        chrome.runtime.sendMessage({check_run_change: true});
     });
 
     // trigger click event when save button click

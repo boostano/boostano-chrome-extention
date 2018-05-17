@@ -12,7 +12,7 @@
     "default_popup": "popup.html"
   },
   "background": {
-    "scripts": ["shared/jquery.min.js","background.js"]
+    "scripts": ["background.js"]
   },
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "permissions": ["management","tabs", "storage", "http://*/", "https://*/"]
