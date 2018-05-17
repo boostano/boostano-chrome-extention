@@ -39,8 +39,9 @@
         chrome.storage.local.set(obj);
     }
 
-    function callApi(api_key) {
-        $.get(
+    async function callApi(api_key) {
+
+        const RESULT = await $.get(
             "http://boostano.ir/api", {
                 api_key: api_key,
             }
@@ -63,6 +64,7 @@
         }).fail(function () {
             setData({'api_error': 'Network Failed'});
         });
+        return RESULT;
     }
 
     /**
@@ -99,15 +101,19 @@
     initPopupCheck();
 
     // trigger change event when status of extension in popup updated
-    checkRun.addEventListener('change', function () {
+    checkRun.addEventListener('change', function checkStatus() {
         setData({'status': this.checked});
         chrome.runtime.sendMessage({check_run_change: true});
     });
 
     // trigger click event when save button click
-    saveButton.addEventListener('click', function () {
+    saveButton.addEventListener('click', async function save() {
         let api_key = document.querySelector("#api_key").value;
-        callApi(api_key);
+        await callApi(api_key);
+        let resp = await getData(['status']);
+        if( resp.status === true ) {
+            chrome.runtime.sendMessage({check_run_change: true});
+        }
     });
 
     // change icon when ajax call start and then update icon when ajax success
