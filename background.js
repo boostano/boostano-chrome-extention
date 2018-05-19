@@ -54,7 +54,7 @@
                 setError(errorMsg);
             }
         } catch (err) {
-            setError(err);
+            setError(err.message);
         }
     }
 
