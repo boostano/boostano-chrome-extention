@@ -1,8 +1,8 @@
 (function popup($) {
 
-    var checkRun = document.querySelector("#check_run");
-    var saveButton = document.querySelector("#save_key");
-    var updatePopupHtmlFirstTime = false;
+    let checkRun = document.querySelector("#check_run");
+    let saveButton = document.querySelector("#save_key");
+    let updatePopupHtmlFirstTime = false;
 
     async function updatePopupHtml() {
         const POPUP_DATA = await getData(['status', 'api_key', 'point', 'name', 'api_error']);
