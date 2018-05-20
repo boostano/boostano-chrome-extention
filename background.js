@@ -1,6 +1,6 @@
 (function background() {
-    var remaining;
-    var tabId = false;
+    let remaining;
+    let tabId = false;
     // listen to event if request send from popup.js
     chrome.runtime.onMessage.addListener(function (request) {
         if (request.check_run_change === true) {
