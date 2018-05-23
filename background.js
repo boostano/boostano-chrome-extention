@@ -48,8 +48,6 @@
                     var errorMsg = 'For activate this extension, first you must enable Alexa Traffic Rank then click run button on top toolbar to start!';
                 } else if (STORAGE_DATA.status === false && TOOLBAR_STATUS.enabled === true) {
                     var errorMsg = 'Click on Run button on top toolbar to start!';
-                } else if (STORAGE_DATA.status === true && TOOLBAR_STATUS.enabled !== true) {
-                    var errorMsg = 'Alexa extension is not install or enable';
                 }
                 setError(errorMsg);
             }
