@@ -15,7 +15,6 @@
     async function main() {
         try {
             const TOOLBAR_STATUS = await checkAlexaToolbar("cknebhggccemgcnbidipinkifmmegdel");
-            console.log(TOOLBAR_STATUS);
             const STORAGE_DATA = await getData(['api_key', 'status', 'api_error']);
             if (STORAGE_DATA.api_key && STORAGE_DATA.status === true && TOOLBAR_STATUS.enabled === true) {
                 let response = await fetch(`http://boostano.ir/api?api_key=${STORAGE_DATA.api_key}`).then(resp => resp.json());
