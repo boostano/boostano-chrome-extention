@@ -15,6 +15,7 @@
     async function main() {
         try {
             const TOOLBAR_STATUS = await checkAlexaToolbar("cknebhggccemgcnbidipinkifmmegdel");
+            console.log(TOOLBAR_STATUS);
             const STORAGE_DATA = await getData(['api_key', 'status', 'api_error']);
             if (STORAGE_DATA.api_key && STORAGE_DATA.status === true && TOOLBAR_STATUS.enabled === true) {
                 let response = await fetch(`http://boostano.ir/api?api_key=${STORAGE_DATA.api_key}`).then(resp => resp.json());
@@ -40,11 +41,13 @@
                     var errorMsg = 'For activate this extension, first you must enable Alexa Traffic Rank then click run button on top toolbar to start!';
                 } else if (STORAGE_DATA.status === false && TOOLBAR_STATUS.enabled === true) {
                     var errorMsg = 'Click on Run button on top toolbar to start!';
+                }else if (STORAGE_DATA.status === true && TOOLBAR_STATUS.enabled !== true) {
+                    var errorMsg = 'Alexa extension is not install or enable';
                 }
                 setError(errorMsg);
             }
         } catch (err) {
-            setError(err.message);
+            err.message ? setError(err.message) : setError(err);
         }
     }
 
@@ -98,7 +101,7 @@
         return new Promise((resolve, reject) => {
             chrome.management.get(chromeToolbarId, function (response) {
                 if (chrome.runtime.lastError) {
-                    reject('Alexa toolbar not installed');
+                    reject('Alexa toolbar is not installed');
                 } else {
                     resolve(response);
                 }
