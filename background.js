@@ -8,7 +8,6 @@
         }
     });
     main();
-
     /**
      * main function
      * @returns {Promise<void>}
@@ -20,26 +19,19 @@
             if (STORAGE_DATA.api_key && STORAGE_DATA.status === true && TOOLBAR_STATUS.enabled === true) {
                 let response = await fetch(`http://boostano.ir/api?api_key=${STORAGE_DATA.api_key}`).then(resp => resp.json());
                 if (response.request.request_status === true) {
-                    setError('');
                     let timer = Number(response.timer);
                     let site_list = response.request.site_list;
-
                     let tabStatus = await getTab(tabId);
-                    if (tabStatus === 100) {
-                        let tab = await createTab(site_list);
-                        tabId = tab.id;
-                    } else if (tabStatus === 200) {
-                        await updateTab(tabId, site_list);
+                    switch(tabStatus) {
+                        case 100:
+                            let tab = await createTab(site_list);
+                            tabId = tab.id;
+                            break;
+                        case 200:
+                            await updateTab(tabId, site_list);
+                            break;
                     }
-                    if (!isNaN(timer)) {
-                        let end = (new Date).getTime() + timer * 1000;
-                        setBatchText(end);
-                        setTimeout(main, timer * 1000);
-                    } else {
-                        let end = (new Date).getTime() + 60 * 1000;
-                        setBatchText(end);
-                        setTimeout(main, 60 * 1000);
-                    }
+                    !isNaN(timer) ? core(timer): setError('An error occur, call administrator about error');
                 } else {
                     setError(response.error.message);
                 }
@@ -56,6 +48,16 @@
         }
     }
 
+    /**
+     * core function of main method in background js
+     * @param timer
+     */
+    function core(timer) {
+        setError('');
+        let end = (new Date).getTime() + timer * 1000;
+        setBatchText(end);
+        setTimeout(main, timer * 1000);
+    }
     /**
      * set batch text
      * @param endTime
